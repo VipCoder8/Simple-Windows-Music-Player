@@ -1,0 +1,83 @@
+﻿<Window x:Class="WPFProject.BPlayer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFProject"
+        mc:Ignorable="d"
+        Title="BPlayer" Height="670" Width="900">
+    <Window.Resources>
+        <Style x:Key="NoHoverButtonStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Canvas Name="MainCanvas">
+        <Button Name="Files" Style="{StaticResource NoHoverButtonStyle}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="196" Height="50" Background="Transparent" BorderThickness="0">
+            <Canvas>
+                <Image Source="/assets/LightModeIcons/FolderIcon.png" Width="48" Canvas.Right="35" Canvas.Top="-25"/>
+                <TextBlock Text="My Files" FontSize="18" Height="29" Width="70" Canvas.Top="-15"/>
+            </Canvas>
+        </Button>
+        <Button Name="Playlists" Style="{StaticResource NoHoverButtonStyle}" HorizontalAlignment="Left" Margin="10,65,0,0" VerticalAlignment="Top" Width="196" Height="50" Background="Transparent" BorderThickness="0">
+            <Canvas>
+                <Image Source="/assets/LightModeIcons/PlaylistIcon.png" Width="50" Height="40" Canvas.Right="35" Canvas.Top="-20" Canvas.Left="-82"/>
+                <TextBlock Text="Playlists" FontSize="18" Height="29" Width="70" Canvas.Top="-15"/>
+            </Canvas>
+        </Button>
+        <Button Name="Settings" Style="{StaticResource NoHoverButtonStyle}" HorizontalAlignment="Left" Margin="10,120,0,0" VerticalAlignment="Top" Width="196" Height="50" Background="Transparent" BorderThickness="0">
+            <Canvas>
+                <Image Source="/assets/LightModeIcons/SettingsIcon.png" Width="50" Height="40" Canvas.Right="35" Canvas.Top="-20" Canvas.Left="-82"/>
+                <TextBlock Text="Settings" FontSize="18" Height="29" Width="70" Canvas.Top="-15"/>
+            </Canvas>
+        </Button>
+        <TextBox x:Name="SearchBox" HorizontalAlignment="Center" FontSize="17" Padding="20,2,0,0" FontWeight="Bold" VerticalAlignment="Top" Width="642" Canvas.Left="206" Height="33" BorderThickness="0,0,0,1"/>
+        <ScrollViewer Visibility="Visible" Name="FilesViewer" HorizontalAlignment="Left" VerticalAlignment="Top" Height="510" Canvas.Left="206" Canvas.Top="38" CanContentScroll="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+            <Canvas x:Name="MyFilesCanvas" Visibility="Visible">
+                <TextBlock x:Name="NotFoundMusic" Canvas.Left="102" FontSize="17" TextWrapping="Wrap" Canvas.Top="233" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="435" Visibility="Hidden"><Run Text="Seems Like you don't have any music files in Music folder, choose a music file or a folder with them"/><LineBreak/><Run/></TextBlock>
+                <Button x:Name="ChooseMusicFileButton" Content="Choose Music File" Visibility="Hidden" FontSize="14" Background="Transparent" BorderThickness="0" FontWeight="Bold" Canvas.Left="256" Canvas.Top="301" HorizontalAlignment="Center" VerticalAlignment="Top" Width="123" Height="30"/>
+                <Button x:Name="ChooseMusicFolderButton" Content="Choose Music Folder" Visibility="Hidden" FontSize="14" Background="Transparent" BorderThickness="0" FontWeight="Bold" Canvas.Left="256" Canvas.Top="331" HorizontalAlignment="Center" VerticalAlignment="Top" Width="145" Height="30"/>
+            </Canvas>
+        </ScrollViewer>
+        <ScrollViewer Name="PlaylistsViewer" Height="606" Width="684" Canvas.Left="206" Canvas.Top="38" Visibility="Collapsed">
+            <Canvas Name="PlaylistsCanvas">
+                <Button Name="AddPlaylistButtonWF" Visibility="Collapsed" Background="Transparent" BorderThickness="0" Content="Add Playlist" Canvas.Left="25" Canvas.Bottom="580" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                <TextBlock Name="NothingHereText" Text="Nothing here.. Try adding one" Canvas.Left="229" Canvas.Top="255" FontSize="18"/>
+                <Button Name="AddPlaylistButtonWN" Background="Transparent" BorderThickness="0" Content="Add Playlist" Canvas.Left="300" Canvas.Top="300" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            </Canvas>
+        </ScrollViewer>
+        <Canvas Name="SettingsCanvas" Margin="206,0,0,0" Visibility="Collapsed">
+            <TextBlock Name="AppThemeText" Canvas.Left="15" TextWrapping="Wrap" Text="App Theme" Canvas.Top="38" FontSize="24" FontFamily="Bahnschrift"/>
+            <Image Cursor="Hand" Name="ThemeModeButton" Source="/assets/LightModeIcons/DarkModeOff.png" Canvas.Left="44" Canvas.Top="67" HorizontalAlignment="Left" VerticalAlignment="Center" Width="66" Height="62" />
+        </Canvas>
+        <Canvas Name="ControllingCanvas" Visibility="Hidden" Height="82" Width="701" Canvas.Left="199" Canvas.Top="548" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <Slider x:Name="MusicProgress" Visibility="Visible" Canvas.Left="0" Canvas.Top="0" Width="674" Height="21"/>
+            <Image x:Name="GlobalStateButton" Height="48" Visibility="Visible" Cursor="Hand" Canvas.Left="350" Source="/assets/LightModeIcons/PlayIcon.png" Stretch="Fill" Canvas.Top="17" Width="48"/>
+            <Image x:Name="NextButton" Cursor="Hand" Height="52" Canvas.Left="398" Visibility="Visible" Source="/assets/LightModeIcons/NextIcon.png" Stretch="Fill" Canvas.Top="13" Width="55" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <Image x:Name="PreviousButton" Cursor="Hand" Height="52" Canvas.Left="290" Visibility="Visible" Source="/assets/LightModeIcons/PreviousIcon.png" Stretch="Fill" Canvas.Top="13" Width="55" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        </Canvas>
+        <Border Background="White" CornerRadius="9" Width="515" Height="165" Name="AddPlaylistForm" Visibility="Collapsed" Canvas.Left="300" Canvas.Top="200" BorderBrush="DodgerBlue" BorderThickness="1">
+            <Canvas Background="White" Height="150" Width="500" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <Button Name="AddPlaylistButton" Content="Add Playlist" FontSize="24" Canvas.Left="173" Canvas.Top="94" Background="Transparent" BorderThickness="0" Height="46" Width="154" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                <TextBox x:Name="TitleBox" Text="Title" HorizontalAlignment="Left" FontSize="17" Padding="20,4,0,0" FontWeight="Bold" VerticalAlignment="Center" Width="480" Canvas.Left="10" Height="33" BorderThickness="0,0,0,1" Canvas.Top="42"/>
+                <Image Name="CloseForm" Height="27" Cursor ="Hand" Canvas.Left="463" Source="/assets/LightModeIcons/CloseIcon.png" Stretch="Fill" Canvas.Top="10" Width="27" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </Canvas>
+        </Border>
+        <Border Background="White" CornerRadius="9" Width="515" Height="165" Name="EditPlaylistForm" Visibility="Collapsed" Canvas.Left="300" Canvas.Top="200" BorderBrush="DodgerBlue" BorderThickness="1">
+            <Canvas Background="White" Height="150" Width="500" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <Button Name="EditPlaylistButton" Content="Edit Playlist" FontSize="24" Canvas.Left="173" Canvas.Top="94" Background="Transparent" BorderThickness="0" Height="46" Width="154" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                <TextBox x:Name="NewTitleBox" Text="New Title" HorizontalAlignment="Left" FontSize="17" Padding="20,4,0,0" FontWeight="Bold" VerticalAlignment="Center" Width="480" Canvas.Left="10" Height="33" BorderThickness="0,0,0,1" Canvas.Top="42"/>
+                <Image Name="CloseEditForm" Height="27" Cursor ="Hand" Canvas.Left="463" Source="/assets/LightModeIcons/CloseIcon.png" Stretch="Fill" Canvas.Top="10" Width="27" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </Canvas>
+        </Border>
+    </Canvas>
+</Window>
