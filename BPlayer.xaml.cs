@@ -13,10 +13,8 @@ namespace WPFProject
     public partial class BPlayer : Window
     {
         List<Canvas> musicPanels;
-        List<Canvas> playlists;
         //White Mode Icons
         BitmapImage playIcon;
-        BitmapImage playlistIcon;
         BitmapImage settingsIcon;
         BitmapImage folderIcon;
         BitmapImage pauseIcon;
@@ -24,7 +22,6 @@ namespace WPFProject
         BitmapImage darkModeOffIcon;
         //Dark Mode Icons
         BitmapImage folderDarkModeIcon;
-        BitmapImage playlistDarkModeIcon;
         BitmapImage settingsDarkModeIcon;
         BitmapImage pauseDarkModeIcon;
         BitmapImage playDarkModeIcon;
@@ -54,13 +51,11 @@ namespace WPFProject
             pauseIcon = new BitmapImage(new Uri("C:\\Users\\user\\source\\repos\\WPFProject\\WPFProject\\assets\\LightModeIcons\\PauseIcon.png"));
             editIcon = new BitmapImage(new Uri("C:\\Users\\user\\source\\repos\\WPFProject\\WPFProject\\assets\\LightModeIcons\\EditIcon.png"));
             darkModeOffIcon = new BitmapImage(new Uri("C:\\Users\\user\\source\\repos\\WPFProject\\WPFProject\\assets\\LightModeIcons\\DarkModeOff.png"));
-            playlistIcon = new BitmapImage(new Uri("C:\\Users\\user\\source\\repos\\WPFProject\\WPFProject\\assets\\LightModeIcons\\PlaylistIcon.png"));
             settingsIcon = new BitmapImage(new Uri("C:\\Users\\user\\source\\repos\\WPFProject\\WPFProject\\assets\\LightModeIcons\\SettingsIcon.png"));
             folderIcon = new BitmapImage(new Uri("C:\\Users\\user\\source\\repos\\WPFProject\\WPFProject\\assets\\LightModeIcons\\FolderIcon.png"));
             //Dark Mode Icons
             darkModeOnIcon = new BitmapImage(new Uri("C:\\Users\\user\\source\\repos\\WPFProject\\WPFProject\\assets\\DarkModeIcons\\DarkModeOn.png"));
             folderDarkModeIcon = new BitmapImage(new Uri("C:\\Users\\user\\source\\repos\\WPFProject\\WPFProject\\assets\\DarkModeIcons\\FolderDarkMode.png"));
-            playlistDarkModeIcon = new BitmapImage(new Uri("C:\\Users\\user\\source\\repos\\WPFProject\\WPFProject\\assets\\DarkModeIcons\\PlaylistIconDarkMode.png"));
             settingsDarkModeIcon = new BitmapImage(new Uri("C:\\Users\\user\\source\\repos\\WPFProject\\WPFProject\\assets\\DarkModeIcons\\SettingsIconDarkMode.png"));
             pauseDarkModeIcon = new BitmapImage(new Uri("C:\\Users\\user\\source\\repos\\WPFProject\\WPFProject\\assets\\DarkModeIcons\\PauseIconDarkMode.png"));
             playDarkModeIcon = new BitmapImage(new Uri("C:\\Users\\user\\source\\repos\\WPFProject\\WPFProject\\assets\\DarkModeIcons\\PlayIconDarkMode.png"));
@@ -136,16 +131,6 @@ namespace WPFProject
                     this.ControllingCanvas.Visibility = Visibility.Visible;
                 }
                 this.SettingsCanvas.Visibility = Visibility.Collapsed;
-                this.PlaylistsViewer.Visibility = Visibility.Collapsed;
-            };
-            this.Playlists.Click += (sender, e) =>
-            {
-                this.PlaylistsViewer.Visibility = Visibility.Visible;
-                this.SearchBox.Visibility = Visibility.Visible;
-                this.MyFilesCanvas.Visibility = Visibility.Collapsed;
-                this.FilesViewer.Visibility = Visibility.Collapsed;
-                this.ControllingCanvas.Visibility = Visibility.Collapsed;
-                this.SettingsCanvas.Visibility = Visibility.Collapsed;
             };
             this.Settings.Click += (sender, e) =>
             {
@@ -153,7 +138,6 @@ namespace WPFProject
                 this.SearchBox.Visibility = Visibility.Collapsed;
                 this.FilesViewer.Visibility = Visibility.Collapsed;
                 this.ControllingCanvas.Visibility = Visibility.Collapsed;
-                this.PlaylistsViewer.Visibility = Visibility.Collapsed;
                 this.SettingsCanvas.Visibility = Visibility.Visible;
             };
             this.GlobalStateButton.MouseDown += (sender, e) =>
@@ -257,45 +241,6 @@ namespace WPFProject
                 woe = new WaveOutEvent();
                 woe.Init(audioFile);
                 woe.Play();
-            };
-            this.AddPlaylistButtonWN.Click += (sender, e) =>
-            {
-                this.Files.IsEnabled = false;
-                this.Settings.IsEnabled = false;
-                this.Playlists.IsEnabled = false;
-                this.AddPlaylistForm.Visibility = 0;
-            };
-            this.AddPlaylistButtonWF.Click += (sender, e) =>
-            {
-                this.Files.IsEnabled = false;
-                this.Settings.IsEnabled = false;
-                this.Playlists.IsEnabled = false;
-                this.AddPlaylistForm.Visibility = 0;
-            };
-            this.CloseForm.MouseDown += (sender, e) =>
-            {
-                this.Files.IsEnabled = true;
-                this.Settings.IsEnabled = true;
-                this.Playlists.IsEnabled = true;
-                this.AddPlaylistForm.Visibility = (Visibility)2;
-            };
-            this.AddPlaylistButton.Click += (sender, e) =>
-            {
-                this.Files.IsEnabled = true;
-                this.Settings.IsEnabled = true;
-                this.Playlists.IsEnabled = true;
-                this.AddPlaylistForm.Visibility = (Visibility)2;
-                this.AddPlaylistButtonWF.Visibility = 0;
-                createPlaylist(TitleBox.Text);
-            };
-            this.CloseEditForm.MouseDown += (sender, e) =>
-            {
-                this.EditPlaylistForm.Visibility = Visibility.Collapsed;
-            };
-            this.EditPlaylistButton.Click += (sender, e) =>
-            {
-                ((TextBlock)this.playlists[selectedPlaylist].Children[2]).Text = this.NewTitleBox.Text;
-                this.EditPlaylistForm.Visibility = Visibility.Collapsed;
             };
             this.ThemeModeButton.MouseDown += (sender, e) =>
             {
@@ -411,51 +356,6 @@ namespace WPFProject
                 }
             }
         }
-        public void updatePlaylistsEditButtonEventListener(int startIndex)
-        {
-            for(int i = startIndex; i< playlists.Count; i++)
-            {
-                int selectedPlaylistIndex = i;
-                playlists[i].Children[1].MouseDown += (sender, e) =>
-                {
-                    selectedPlaylist = selectedPlaylistIndex;
-                    this.EditPlaylistForm.Visibility = 0;
-                };
-            }
-        }
-        public void createPlaylist(string title)
-        {
-            NothingHereText.Visibility = Visibility.Collapsed;
-            AddPlaylistButtonWN.Visibility = Visibility.Collapsed;
-            Canvas playlistCanvas = new Canvas();
-            Image stateButton = new Image();
-            stateButton.Source = playIcon;
-            stateButton.Cursor = System.Windows.Input.Cursors.Hand;
-            stateButton.Width = 32;
-            stateButton.Height = 32;
-            TextBlock titleBlock = new TextBlock();
-            titleBlock.Text = title;
-            titleBlock.FontSize = 18;
-            Canvas.SetLeft(titleBlock, 75);
-            Canvas.SetTop(titleBlock, 6);
-            Image editButton = new Image();
-            editButton.Source = editIcon;
-            editButton.Cursor = System.Windows.Input.Cursors.Hand;
-            editButton.Width = 32;
-            editButton.Height = 32;
-            Canvas.SetLeft(editButton, 35);
-            Canvas.SetBottom(playlistCanvas, playlistsY);
-            Canvas.SetLeft(playlistCanvas, 25);
-            playlistCanvas.Children.Add(stateButton);
-            playlistCanvas.Children.Add(editButton);
-            playlistCanvas.Children.Add(titleBlock);
-            playlistCanvas.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
-            playlistCanvas.VerticalAlignment = VerticalAlignment.Top;
-            this.PlaylistsCanvas.Children.Add(playlistCanvas);
-            playlistsY -= 48;
-            playlists.Add(playlistCanvas);
-            updatePlaylistsEditButtonEventListener(playlists.Count-1);
-        }
         public void changeToDarkMode()
         {
             //Canvases
@@ -471,9 +371,6 @@ namespace WPFProject
             this.Files.Background = new SolidColorBrush(Color.FromRgb(24, 24, 24));
             ((TextBlock)((Canvas)this.Files.Content).Children[1]).Foreground = new SolidColorBrush(Colors.White);
             ((Image)((Canvas)this.Files.Content).Children[0]).Source = folderDarkModeIcon;
-            this.Playlists.Background = new SolidColorBrush(Color.FromRgb(24, 24, 24));
-            ((TextBlock)((Canvas)this.Playlists.Content).Children[1]).Foreground = new SolidColorBrush(Colors.White);
-            ((Image)((Canvas)this.Playlists.Content).Children[0]).Source = playlistDarkModeIcon;
             this.AppThemeText.Foreground = new SolidColorBrush(Colors.White);
         }
         public void changeToWhiteMode()
@@ -491,9 +388,6 @@ namespace WPFProject
             this.Files.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
             ((TextBlock)((Canvas)this.Files.Content).Children[1]).Foreground = new SolidColorBrush(Colors.Black);
             ((Image)((Canvas)this.Files.Content).Children[0]).Source = folderIcon;
-            this.Playlists.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-            ((TextBlock)((Canvas)this.Playlists.Content).Children[1]).Foreground = new SolidColorBrush(Colors.Black);
-            ((Image)((Canvas)this.Playlists.Content).Children[0]).Source = playlistIcon;
             this.AppThemeText.Foreground = new SolidColorBrush(Colors.Black);
         }
     }
